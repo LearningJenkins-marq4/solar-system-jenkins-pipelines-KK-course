@@ -3,7 +3,7 @@ pipeline {
   agent any
 
   environment {
-    DependecyScanReportsPath: "DependecyScanReports"
+    DependecyScanReportsPath = "DependecyScanReports"
   }
 
   tools {

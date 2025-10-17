@@ -23,5 +23,11 @@ pipeline {
       }
     }
 
+    stage('Install dependencies'){
+      steps {
+        sh ' npm install --no-audit '
+      }
+    }
+
   }
 }

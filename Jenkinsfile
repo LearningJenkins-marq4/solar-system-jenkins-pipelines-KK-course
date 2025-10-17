@@ -2,6 +2,10 @@
 pipeline {
   agent any
 
+  environment {
+    DependecyScanReportsPath: "DependecyScanReports"
+  }
+
   tools {
     nodejs "NodeJS2260"
   }
@@ -39,11 +43,14 @@ pipeline {
 
         stage('OWASP Dependency Check') {
           steps {
-            dependencyCheck additionalArguments: """
-              --scan '.'
-              --out DependecyScanReports
-              --format ALL
-              --prettyPrint""",
+            sh " mkdir ${env.DependecyScanReportsPath} "
+            dependencyCheck additionalArguments:
+              """
+                --scan '.'
+                --out ${env.DependecyScanReportsPath}
+                --format ALL
+                --prettyPrint
+              """,
               odcInstallation: 'OWASP-DependencyCheck-1003'
           }
         }
@@ -52,4 +59,3 @@ pipeline {
 
   }
 }
-

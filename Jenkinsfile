@@ -29,5 +29,26 @@ pipeline {
       }
     }
 
+    stage('Dependency Scanning parallel(audit + dep check)') {
+      parallel {
+        stage('NPM Audit') {
+          steps {
+            sh ' npm audit --audit-level=critical '
+          }
+        }
+
+        stage('OWASP Dependency Check') {
+          steps {
+            dependencyCheck additionalArguments: """
+              --scan '.'
+              --out DependecyScanReports
+              --format ALL
+              --prettyPrint""",
+              odcInstallation: 'OWASP-DependencyCheck-1003'
+          }
+        }
+      }
+    }
+
   }
 }

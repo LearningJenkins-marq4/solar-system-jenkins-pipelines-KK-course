@@ -54,6 +54,18 @@ pipeline {
       }
     }
 
+    stage('Test NVD connection') {
+      steps {
+        withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+          sh '''
+            curl -v -H "apiKey: ${NVD_API_KEY}" \
+            "https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=1"
+          '''
+        }
+      }
+    }
+
+/*
     stage('VERBOSE OWASP DC') {
       steps {
         sh " mkdir -p ${env.DependecyScanReportsPath} "
@@ -74,6 +86,7 @@ pipeline {
         archiveArtifacts artifacts: dependency-check.log, allowEmptyArchive: true
       }
     }
+*/
 
 /*
     stage('Dependency Scanning parallel(audit + dep check)') {

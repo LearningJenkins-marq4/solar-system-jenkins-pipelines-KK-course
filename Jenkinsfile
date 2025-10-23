@@ -51,15 +51,17 @@ pipeline {
             script {
               withCredentials(
               [string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
-                dependencyCheck additionalArguments:
-                  """
-                    --scan '.'
-                    --out ${env.DependecyScanReportsPath}
-                    --format ALL
-                    --prettyPrint
-                    --nvdApiKey ${NVD_API_KEY}
-                  """,
-                  odcInstallation: 'OWASP-DependencyCheck-1003'
+                withEnv(["SCAN_PATH=${env.DependecyScanReportsPath}"]) {
+                  dependencyCheck additionalArguments:
+                    '''
+                      --scan '.'
+                      --out ${SCAN_PATH}
+                      --format ALL
+                      --prettyPrint
+                      --nvdApiKey ${NVD_API_KEY}
+                    ''',
+                    odcInstallation: 'OWASP-DependencyCheck-1003'
+                }
               }
             }
           }

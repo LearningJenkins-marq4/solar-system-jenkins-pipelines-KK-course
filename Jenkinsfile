@@ -59,6 +59,7 @@ pipeline {
                       --format ALL
                       --prettyPrint
                       --nvdApiKey ${NVD_API_KEY}
+                      --suppression suppression.xml
                     ''',
                     odcInstallation: 'OWASP-DependencyCheck-1003'
 

@@ -65,10 +65,27 @@ pipeline {
       }
     }
 
+    stage('Update NVD Database') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+            def dcHome = tool name: 'OWASP-DependencyCheck-1003', type: 'dependency-check'
+            sh """
+              ${dcHome}/bin/dependency-check.sh \\
+              --updateonly \\
+              --nvdApiKey ${NVD_API_KEY} \\
+              --nvdApiDelay 8000
+            """
+          }
+        }
+      }
+    }
+
+/*
     stage('VERBOSE OWASP DC') {
       steps {
         sh " mkdir -p ${env.DependecyScanReportsPath} "
-        sh ' rm -rf ~/.dependency-check-data/ '
+        //sh ' rm -rf ~/.dependency-check-data/ '
         withCredentials([string(credentialsId: 'nvd-api-key', 
           variable: 'NVD_API_KEY')]) {
             dependencyCheck additionalArguments:
@@ -89,6 +106,7 @@ pipeline {
         archiveArtifacts artifacts: dependency-check.log, allowEmptyArchive: true
       }
     }
+*/
 
 /*
     stage('Dependency Scanning parallel(audit + dep check)') {

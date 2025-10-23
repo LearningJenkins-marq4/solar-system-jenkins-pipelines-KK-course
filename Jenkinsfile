@@ -43,15 +43,17 @@ pipeline {
 
         stage('OWASP Dependency Check') {
           steps {
-            sh " mkdir ${env.DependecyScanReportsPath} "
-            dependencyCheck additionalArguments:
-              """
-                --scan '.'
-                --out ${env.DependecyScanReportsPath}
-                --format ALL
-                --prettyPrint
-              """,
-              odcInstallation: 'OWASP-DependencyCheck-1003'
+            sh " mkdir -p ${env.DependecyScanReportsPath} "
+            script {
+              dependencyCheck additionalArguments:
+                """
+                  --scan '.'
+                  --out ${env.DependecyScanReportsPath}
+                  --format ALL
+                  --prettyPrint
+                """,
+                odcInstallation: 'OWASP-DependencyCheck-1003'
+            }
           }
         }
       }

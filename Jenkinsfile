@@ -52,7 +52,7 @@ pipeline {
               withCredentials(
               [string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
                 withEnv(["SCAN_PATH=${env.DependecyScanReportsPath}"]) {
-                  dependencyCheck additionalArguments:
+                  def result = dependencyCheck additionalArguments:
                     '''
                       --scan '.'
                       --out ${SCAN_PATH}
@@ -61,6 +61,10 @@ pipeline {
                       --nvdApiKey ${NVD_API_KEY}
                     ''',
                     odcInstallation: 'OWASP-DependencyCheck-1003'
+
+                  if (currentBuild.result == 'FAILURE') {
+                    error('Stage failed.')
+                  }
                 }
               }
             }

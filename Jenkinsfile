@@ -37,7 +37,7 @@ pipeline {
       }
     }
 
-stage('Dependency Scanning parallel(audit + dep check)') {
+  stage('Dependency Scanning parallel(audit + dep check)') {
       parallel {
         stage('NPM Audit') {
           steps {
@@ -59,6 +59,7 @@ stage('Dependency Scanning parallel(audit + dep check)') {
                       --format ALL
                       --prettyPrint
                       --nvdApiKey ${NVD_API_KEY}
+                      --disableYarnAudit
                     ''',
                     odcInstallation: 'OWASP-DependencyCheck-1218'
 

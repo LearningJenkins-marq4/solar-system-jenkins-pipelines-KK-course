@@ -65,10 +65,10 @@ pipeline {
       }
     }
 
-/*
     stage('VERBOSE OWASP DC') {
       steps {
         sh " mkdir -p ${env.DependecyScanReportsPath} "
+        sh ' rm -rf ~/.dependency-check-data/ '
         withCredentials([string(credentialsId: 'nvd-api-key', 
           variable: 'NVD_API_KEY')]) {
             dependencyCheck additionalArguments:
@@ -80,13 +80,15 @@ pipeline {
               --nvdApiKey ${NVD_API_KEY}
               --suppression suppression.xml
               --log dependency-check.log
+              --nvdApiDelay 8000
+              --nvdMaxRetryCount 15
+              --connectionTimeout 120000
             """,
             odcInstallation: 'OWASP-DependencyCheck-1003'
         }
         archiveArtifacts artifacts: dependency-check.log, allowEmptyArchive: true
       }
     }
-*/
 
 /*
     stage('Dependency Scanning parallel(audit + dep check)') {

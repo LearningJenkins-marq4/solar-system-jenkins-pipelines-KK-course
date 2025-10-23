@@ -37,6 +37,13 @@ pipeline {
       }
     }
 
+    stage('OWASP Dependency Check version') {
+      steps {
+        sh ' dependency-check --version '
+      }
+    }
+
+/*
     stage('Dependency Scanning parallel(audit + dep check)') {
       parallel {
         stage('NPM Audit') {
@@ -73,6 +80,7 @@ pipeline {
         }
       }
     }
+*/
 
   }
 }

@@ -68,7 +68,7 @@ pipeline {
                   }
 
                   dependencyCheckPublisher failedTotalCritical: 1, 
-                    pattern: 'dependency-check-report.xml', stopBuild: true
+                    pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: true
                 }
               }
             }

@@ -54,6 +54,27 @@ pipeline {
       }
     }
 
+    stage('VERBOSE OWASP DC') {
+      steps {
+        sh " mkdir -p ${env.DependecyScanReportsPath} "
+        withCredentials([string(credentialsId: 'nvd-api-key', 
+          variable: 'NVD_API_KEY')]) {
+            dependencyCheck additionalArguments:
+            """
+              --scan '.'
+              --out ${env.DependecyScanReportsPath}
+              --format ALL
+              --prettyPrint
+              --nvdApiKey ${NVD_API_KEY}
+              --suppression suppression.xml
+              --log dependency-check.log
+            """,
+            odcInstallation: 'OWASP-DependencyCheck-1003'
+        }
+        archiveArtifacts artifacts: dependency-check.log, allowEmptyArchive: true
+      }
+    }
+
 /*
     stage('Dependency Scanning parallel(audit + dep check)') {
       parallel {

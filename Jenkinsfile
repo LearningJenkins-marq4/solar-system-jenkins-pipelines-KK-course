@@ -69,7 +69,7 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
-            def dcHome = tool name: 'OWASP-DependencyCheck-1003', type: 'dependency-check'
+            def dcHome = tool name: 'OWASP-DependencyCheck-1218', type: 'dependency-check'
             sh """
               ${dcHome}/bin/dependency-check.sh \\
               --updateonly \\

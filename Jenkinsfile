@@ -16,6 +16,7 @@ pipeline {
 
   stages{
 
+/*
     stage('Display message') {
       steps {
         echo "Jenkins has been able to find this file and execute the Pipeline!"
@@ -36,11 +37,20 @@ pipeline {
         sh ' npm install --no-audit '
       }
     }
+*/
 
     stage('OWASP Dependency Check version') {
       steps {
 				dependencyCheck additionalArguments: 
 					'--version', odcInstallation: 'OWASP-DependencyCheck-1003'
+      }
+    }
+
+    stage('Verify suppression XML file is found') {
+      steps {
+        script {
+          sh ' ls -la suppression.xml '
+        }
       }
     }
 

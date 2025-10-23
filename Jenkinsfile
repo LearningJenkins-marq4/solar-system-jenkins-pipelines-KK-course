@@ -39,7 +39,8 @@ pipeline {
 
     stage('OWASP Dependency Check version') {
       steps {
-        dependencyCheck --version
+				dependencyCheck additionalArguments: 
+					'--version', odcInstallation: 'OWASP-DependencyCheck-1003'
       }
     }
 

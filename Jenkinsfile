@@ -82,7 +82,7 @@ pipeline {
               --log dependency-check.log
               --nvdApiDelay 8000
               --nvdMaxRetryCount 15
-              --connectionTimeout 120000
+              --connectiontimeout 120000
             """,
             odcInstallation: 'OWASP-DependencyCheck-1003'
         }

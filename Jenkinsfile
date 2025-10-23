@@ -49,14 +49,18 @@ pipeline {
           steps {
             sh " mkdir -p ${env.DependecyScanReportsPath} "
             script {
-              dependencyCheck additionalArguments:
-                """
-                  --scan '.'
-                  --out ${env.DependecyScanReportsPath}
-                  --format ALL
-                  --prettyPrint
-                """,
-                odcInstallation: 'OWASP-DependencyCheck-1003'
+              withCredentials(
+              [string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+                dependencyCheck additionalArguments:
+                  """
+                    --scan '.'
+                    --out ${env.DependecyScanReportsPath}
+                    --format ALL
+                    --prettyPrint
+                    --nvdApiKey ${NVD_API_KEY}
+                  """,
+                  odcInstallation: 'OWASP-DependencyCheck-1003'
+              }
             }
           }
         }

@@ -39,7 +39,7 @@ pipeline {
 
     stage('OWASP Dependency Check version') {
       steps {
-        sh ' dependency-check --version '
+        dependencyCheck --version
       }
     }
 

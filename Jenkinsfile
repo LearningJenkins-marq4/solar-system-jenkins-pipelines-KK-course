@@ -66,6 +66,9 @@ pipeline {
                   if (currentBuild.result == 'FAILURE') {
                     error('Stage failed.')
                   }
+
+                  dependencyCheckPublisher failedTotalCritical: 1, 
+                    pattern: 'dependency-check-report.xml', stopBuild: true
                 }
               }
             }

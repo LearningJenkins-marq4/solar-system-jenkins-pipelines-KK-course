@@ -16,8 +16,8 @@ app.use(cors())
 mongoose.connect(process.env.MONGO_URI, {
     user: process.env.MONGO_USERNAME,
     pass: process.env.MONGO_PASSWORD,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    //useNewUrlParser: true,
+    //useUnifiedTopology: true
 }, function(err) {
     if (err) {
         console.log("error!! " + err)
@@ -40,6 +40,7 @@ var planetModel = mongoose.model('planets', dataSchema);
 
 
 
+/*
 app.post('/planet',   function(req, res) {
    // console.log("Received Planet ID " + req.body.id)
     planetModel.findOne({
@@ -53,6 +54,21 @@ app.post('/planet',   function(req, res) {
         }
     })
 })
+*/
+
+// For mongoose 8.9.5:
+app.post('/planet', async function(req, res) {
+    try {
+        const planetData = await planetModel.findOne({
+            id: req.body.id
+        });
+        res.send(planetData);
+    } catch (err) {
+        console.error("Error fetching planet data:", err);
+        res.status(500).send("Error in Planet Data");
+    }
+})
+
 
 app.get('/',   async (req, res) => {
     res.sendFile(path.join(__dirname, '/', 'index.html'));

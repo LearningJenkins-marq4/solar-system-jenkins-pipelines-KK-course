@@ -74,7 +74,7 @@ pipeline {
                     reportTitles: '', useWrapperFileDirectly: true])
 
                   junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-                    testResults: 'dependency-check-junit.xml'
+                    testResults: "${SCAN_PATH}/dependency-check-junit.xml"
 
                   dependencyCheckPublisher failedTotalCritical: 1, 
                     pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: true

@@ -38,7 +38,7 @@ pipeline {
       }
     }
 
-  stage('Dependency scanning: parallel(audit + dep check)') {
+    stage('Dependency scanning: parallel(audit + dep check)') {
       parallel {
         stage('NPM Audit') {
           steps {
@@ -84,18 +84,17 @@ pipeline {
             }
           }
         }
+      }
+    }
 
-        stage('Unit testing') {
-          steps {
-            withCredentials([usernamePassword(credentialsId: 'mongo-db-creds',
-              passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
-                sh ' npm test '
-                junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-                  testResults: "test-results.xml"
-            }
-          }
+    stage('Unit testing') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'mongo-db-creds',
+          passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+            sh ' npm test '
+            junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
+              testResults: "test-results.xml"
         }
-
       }
     }
 

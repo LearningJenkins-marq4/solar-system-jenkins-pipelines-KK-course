@@ -67,18 +67,18 @@ pipeline {
                     error('Stage failed.')
                   }
 
+                  publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
+                    icon: '', keepAll: true, reportDir: 'DependencyScanReports',
+                    reportFiles: 'dependency-check-jenkins.html',
+                    reportName: 'Dependency Check Jenkins HTML Report',
+                    reportTitles: '', useWrapperFileDirectly: true])
+
+                  junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
+                    testResults: 'dependency-check-junit.xml'
+
                   dependencyCheckPublisher failedTotalCritical: 1, 
                     pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: true
                 }
-
-                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
-                  icon: '', keepAll: true, reportDir: 'DependencyScanReports',
-                  reportFiles: 'dependency-check-jenkins.html',
-                  reportName: 'Dependency Check Jenkins HTML Report',
-                  reportTitles: '', useWrapperFileDirectly: true])
-
-                junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-                  testResults: 'dependency-check-junit.xml'
               }
             }
           }

@@ -9,15 +9,13 @@ pipeline {
   environment {
     DependencyScanReportsPath = "DependencyScanReports"
     MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
-    MONGO_USERNAME = credentials('MONGO_USERNAME')
-    MONGO_PASSWORD = credentials('MONGO_PASSWORD')
   }
 
   tools {
     nodejs "NodeJS2260"
   }
 
-  stages {
+  stages{
 
     stage('Display message') {
       steps {
@@ -72,6 +70,16 @@ pipeline {
                   if (currentBuild.result == 'FAILURE') {
                     error('Stage failed.')
                   }
+
+                  publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
+                    icon: '', keepAll: true, reportDir: 'DependencyScanReports',
+                    reportFiles: 'dependency-check-jenkins.html',
+                    reportName: 'Dependency Check Jenkins HTML Report',
+                    reportTitles: '', useWrapperFileDirectly: true])
+
+                  junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
+                    testResults: "${SCAN_PATH}/dependency-check-junit.xml"
+
                   dependencyCheckPublisher failedTotalCritical: 2, 
                     pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: false
                 }
@@ -84,37 +92,31 @@ pipeline {
 
     stage('Unit testing') {
       steps {
-        sh ' npm test '
+        withCredentials([usernamePassword(credentialsId: 'mongo-db-creds',
+          passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+            sh ' npm test '
+            junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
+              testResults: "test-results.xml"
+        }
       }
     }
 
     stage('Code coverage') {
       steps {
-        catchError(buildResult: 'SUCCESS', message: 'Ignoring for now', stageResult: 'UNSTABLE') {
-          sh ' npm run coverage '
+        withCredentials([usernamePassword(credentialsId: 'mongo-db-creds',
+          passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+            catchError(buildResult: 'SUCCESS', message: 'Ignoring for now', 
+              stageResult: 'UNSTABLE') {
+                sh ' npm run coverage '
+            }
         }
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
+          icon: '', keepAll: true, reportDir: 'coverage/lcov-report',
+          reportFiles: 'index.html',
+          reportName: 'Code Coverage Report',
+          reportTitles: '', useWrapperFileDirectly: true])
       }
     }
 
   }
-
-  post {
-    always {
-      junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-        testResults: "${SCAN_PATH}/dependency-check-junit.xml"
-      junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-        testResults: "test-results.xml"
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '',
-        keepAll: true, reportDir: 'DependencyScanReports',
-        reportFiles: 'dependency-check-jenkins.html',
-        reportName: 'Dependency Check Jenkins HTML Report',
-        reportTitles: '', useWrapperFileDirectly: true])
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
-        icon: '', keepAll: true, reportDir: 'coverage/lcov-report',
-        reportFiles: 'index.html',
-        reportName: 'Code Coverage Report',
-        reportTitles: '', useWrapperFileDirectly: true])
-    }
-  }
-
 }

@@ -101,7 +101,7 @@ pipeline {
   post {
     always {
       junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-        testResults: "${SCAN_PATH}/dependency-check-junit.xml"
+        testResults: "${DependencyScanReportsPath}/dependency-check-junit.xml"
       junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
         testResults: "test-results.xml"
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '',

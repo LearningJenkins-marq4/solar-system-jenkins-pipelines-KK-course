@@ -32,7 +32,10 @@ pipeline {
       }
     }
 
-    stage('Install dependencies'){
+    stage('Install dependencies') {
+      options {
+        timestamps()
+      }
       steps {
         sh ' npm install --no-audit '
       }

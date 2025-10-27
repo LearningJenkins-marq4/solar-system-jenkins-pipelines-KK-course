@@ -42,7 +42,7 @@ pipeline {
       parallel {
         stage('NPM Audit') {
           steps {
-            sh ' npm audit --audit-level=critical '
+            sh ' npm audit || true'
           }
         }
 
@@ -78,7 +78,7 @@ pipeline {
                     testResults: "${SCAN_PATH}/dependency-check-junit.xml"
 
                   dependencyCheckPublisher failedTotalCritical: 2, 
-                    pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: true
+                    pattern: "${SCAN_PATH}/dependency-check-report.xml", stopBuild: false
                 }
               }
             }

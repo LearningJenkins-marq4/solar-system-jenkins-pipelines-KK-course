@@ -101,5 +101,22 @@ pipeline {
       }
     }
 
+    stage('Code coverage') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'mongo-db-creds',
+          passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+            catchError(buildResult: 'SUCCESS', message: 'Ignoring for now', 
+              stageResult: 'UNSTABLE') {
+                sh ' npm run coverage '
+            }
+        }
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
+          icon: '', keepAll: true, reportDir: 'coverage/lcov-report',
+          reportFiles: 'index.html',
+          reportName: 'Code Coverage Report',
+          reportTitles: '', useWrapperFileDirectly: true])
+      }
+    }
+
   }
 }

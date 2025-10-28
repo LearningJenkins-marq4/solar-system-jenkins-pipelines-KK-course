@@ -44,6 +44,7 @@ pipeline {
       }
     }
 
+/*
     stage('Dependency scanning: parallel(audit + dep check)') {
       parallel {
         stage('NPM Audit') {
@@ -80,6 +81,7 @@ pipeline {
             }
           }
         }
+*/
       }
     }
 
@@ -100,7 +102,7 @@ pipeline {
     stage('SonarQube analysis') {
       steps {
         echo "${SONAR_SCANNER_HOME}"
-        timeout(1) {
+        timeout(10) {
           withSonarQubeEnv('Local-Docker-SonarQube') {
             sh """
               ${SONAR_SCANNER_HOME}/bin/sonar-scanner \

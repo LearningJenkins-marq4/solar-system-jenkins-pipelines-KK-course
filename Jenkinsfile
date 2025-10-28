@@ -97,9 +97,12 @@ pipeline {
       }
     }
 
-    stage('SonarQube') {
+    stage('SonarQube analysis') {
       steps {
         echo "${SONAR_SCANNER_HOME}"
+        withSonarQubeEnv() {
+          sh " ${SONAR_SCANNER_HOME}/bin/sonar-scanner "
+        }
       }
     }
 

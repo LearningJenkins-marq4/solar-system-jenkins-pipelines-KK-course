@@ -81,9 +81,9 @@ pipeline {
             }
           }
         }
-*/
       }
     }
+*/
 
     stage('Unit testing') {
       steps {

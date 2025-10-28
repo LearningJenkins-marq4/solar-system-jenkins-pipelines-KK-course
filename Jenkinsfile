@@ -84,14 +84,15 @@ pipeline {
         }
       }
     }
-*/
 
     stage('Unit testing') {
       steps {
         sh ' npm test '
       }
     }
+*/
 
+/*
     stage('Code coverage') {
       steps {
         catchError(buildResult: 'SUCCESS', message: 'Ignoring for now', stageResult: 'UNSTABLE') {
@@ -109,14 +110,22 @@ pipeline {
               ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                 -Dsonar.projectKey=Solar-System \
                 -Dsonar.sources=app.js \
-                -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
-                -Dsonar.branch.name=${env.BRANCH_NAME}
+                -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
             """
           }
           waitForQualityGate abortPipeline: true
         }
       }
     }
+*/
+
+  stage('Containerize') {
+    stage('Build Docker image') {
+      def dockerImage = docker.build("marq4/learning-jenkins-solar-system:${GIT_COMMIT}")
+    }
+    stage('Trivy') {
+    }
+  }
 
   }
 

@@ -12,6 +12,7 @@ pipeline {
     MONGO_USERNAME = credentials('MONGO_USERNAME')
     MONGO_PASSWORD = credentials('MONGO_PASSWORD')
     SONAR_SCANNER_HOME = tool 'sonarqube-scanner-73'
+    BRANCH_NAME = "feature/enable-cicd"
   }
 
   tools {
@@ -108,7 +109,8 @@ pipeline {
               ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                 -Dsonar.projectKey=Solar-System \
                 -Dsonar.sources=app.js \
-                -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+                -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
+                -Dsonar.branch.name=${env.BRANCH_NAME}
             """
           }
           waitForQualityGate abortPipeline: true

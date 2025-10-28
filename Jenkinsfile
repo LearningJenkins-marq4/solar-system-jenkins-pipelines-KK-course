@@ -99,7 +99,7 @@ pipeline {
 
     stage('SonarQube') {
       steps {
-        echo ${SONAR_SCANNER_HOME}
+        echo "${SONAR_SCANNER_HOME}"
       }
     }
 

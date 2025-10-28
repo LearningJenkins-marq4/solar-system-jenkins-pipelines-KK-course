@@ -121,9 +121,14 @@ pipeline {
 
   stage('Containerize') {
     stage('Build Docker image') {
-      def dockerImage = docker.build("marq4/learning-jenkins-solar-system:${GIT_COMMIT}")
+      steps {
+        def dockerImage = docker.build("marq4/learning-jenkins-solar-system:${GIT_COMMIT}")
+      }
     }
     stage('Trivy') {
+      steps {
+        echo ""
+      }
     }
   }
 

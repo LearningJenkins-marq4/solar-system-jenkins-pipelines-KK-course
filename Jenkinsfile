@@ -39,6 +39,7 @@ pipeline {
     }
 */
 
+/*
     stage('Install dependencies') {
       options {
         timestamps()
@@ -47,6 +48,7 @@ pipeline {
         sh ' npm install --no-audit '
       }
     }
+*/
 
 /*
     stage('Dependency scanning: parallel(audit + dep check)') {
@@ -154,6 +156,9 @@ pipeline {
       post {
         always {
           sh """
+            echo "Downloading templates..."
+            curl -o html.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
+            curl -o junit.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/junit.tpl
             ${TRIVY} convert \
               --format template \
               --template "@/usr/local/share/trivy/templates/html.tpl" \

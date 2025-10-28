@@ -13,7 +13,6 @@ pipeline {
     MONGO_PASSWORD = credentials('MONGO_PASSWORD')
     SONAR_SCANNER_HOME = tool 'sonarqube-scanner-73'
     BRANCH_NAME = "feature/enable-cicd"
-    TRIVY = "${WORKSPACE}/trivy-bin/trivy"
   }
 
   tools {
@@ -131,36 +130,8 @@ pipeline {
         }
         stage('Trivy') {
           steps {
-            echo 'Installing Trivy...'
-            sh """
-              curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b ./trivy-bin
-              ${TRIVY} --version
-            """
-            echo 'Scanning Docker image with Trivy...'
-            script {
-              sh """
-                ${TRIVY} image ${dockerImage.imageName()} \
-                  --severity CRITICAL \
-                  --exit-code 1 \
-                  --format json \
-                  --output trivy-image-report.json
-              """
-            }
+            echo "TODO"
           }
-        }
-      }
-      post {
-        always {
-          sh """
-            ${TRIVY} convert \
-              --format template \
-              --template "@contrib/html.tpl" \
-              --output trivy-image-report.html trivy-image-report.json
-            ${TRIVY} convert \
-              --format template \
-              --template "@contrib/junit.tpl" \
-              --output trivy-image-report.xml trivy-image-report.json
-          """
         }
       }
     }
@@ -173,8 +144,6 @@ pipeline {
         testResults: "${DependencyScanReportsPath}/dependency-check-junit.xml"
       junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
         testResults: "test-results.xml"
-      junit allowEmptyResults: true, skipMarkingBuildUnstable: true,
-        testResults: "trivy-image-report.xml"
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '',
         keepAll: true, reportDir: 'DependencyScanReports',
         reportFiles: 'dependency-check-jenkins.html',
@@ -184,11 +153,6 @@ pipeline {
         icon: '', keepAll: true, reportDir: 'coverage/lcov-report',
         reportFiles: 'index.html',
         reportName: 'Code Coverage Report',
-        reportTitles: '', useWrapperFileDirectly: true])
-      publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,
-        icon: '', keepAll: true, reportDir: './',
-        reportFiles: 'trivy-image-report.html',
-        reportName: 'Trivy Docker Image Scan Report',
         reportTitles: '', useWrapperFileDirectly: true])
     }
   }

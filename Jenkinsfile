@@ -22,6 +22,7 @@ pipeline {
 
   stages {
 
+/*
     stage('Display message') {
       steps {
         echo "Jenkins has been able to find this file and execute the Pipeline!"
@@ -36,6 +37,7 @@ pipeline {
         '''
       }
     }
+*/
 
     stage('Install dependencies') {
       options {
@@ -154,11 +156,11 @@ pipeline {
           sh """
             ${TRIVY} convert \
               --format template \
-              --template "@contrib/html.tpl" \
+              --template "@/usr/local/share/trivy/templates/html.tpl" \
               --output trivy-image-report.html trivy-image-report.json
             ${TRIVY} convert \
               --format template \
-              --template "@contrib/junit.tpl" \
+              --template "@/usr/local/share/trivy/templates/junit.tpl" \
               --output trivy-image-report.xml trivy-image-report.json
           """
         }

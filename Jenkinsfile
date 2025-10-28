@@ -119,18 +119,22 @@ pipeline {
     }
 */
 
-  stage('Containerize') {
-    stage('Build Docker image') {
-      steps {
-        def dockerImage = docker.build("marq4/learning-jenkins-solar-system:${GIT_COMMIT}")
+    stage('Containerize') {
+      stages {
+        stage('Build Docker image') {
+          steps {
+            script {
+              dockerImage = docker.build("marq4/learning-jenkins-solar-system:${GIT_COMMIT}")
+            }
+          }
+        }
+        stage('Trivy') {
+          steps {
+            echo "TODO"
+          }
+        }
       }
     }
-    stage('Trivy') {
-      steps {
-        echo ""
-      }
-    }
-  }
 
   }
 

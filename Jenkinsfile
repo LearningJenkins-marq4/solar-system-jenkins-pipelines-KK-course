@@ -11,6 +11,7 @@ pipeline {
     MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
     MONGO_USERNAME = credentials('MONGO_USERNAME')
     MONGO_PASSWORD = credentials('MONGO_PASSWORD')
+    SONAR_SCANNER_HOME = tool 'sonarqube-scanner-73'
   }
 
   tools {
@@ -93,6 +94,12 @@ pipeline {
         catchError(buildResult: 'SUCCESS', message: 'Ignoring for now', stageResult: 'UNSTABLE') {
           sh ' npm run coverage '
         }
+      }
+    }
+
+    stage('SonarQube') {
+      steps {
+        echo ${SONAR_SCANNER_HOME}
       }
     }
 

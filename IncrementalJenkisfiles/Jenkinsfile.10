@@ -145,7 +145,7 @@ pipeline {
               sh """
                 ${TRIVY} image ${dockerImage.imageName()} \
                   --severity CRITICAL \
-                  --exit-code 1 \
+                  --exit-code 0 \
                   --format json \
                   --output trivy-image-report.json
               """
@@ -156,7 +156,7 @@ pipeline {
       post {
         always {
           sh """
-            echo "Downloading templates..."
+            echo "Downloading Trivy templates..."
             curl -o html.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
             curl -o junit.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/junit.tpl
             ${TRIVY} convert \

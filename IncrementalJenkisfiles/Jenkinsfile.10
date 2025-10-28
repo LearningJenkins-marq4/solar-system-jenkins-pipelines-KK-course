@@ -161,11 +161,11 @@ pipeline {
             curl -o junit.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/junit.tpl
             ${TRIVY} convert \
               --format template \
-              --template "@/usr/local/share/trivy/templates/html.tpl" \
+              --template "@html.tpl" \
               --output trivy-image-report.html trivy-image-report.json
             ${TRIVY} convert \
               --format template \
-              --template "@/usr/local/share/trivy/templates/junit.tpl" \
+              --template "@junit.tpl" \
               --output trivy-image-report.xml trivy-image-report.json
           """
         }

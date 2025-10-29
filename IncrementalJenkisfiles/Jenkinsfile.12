@@ -164,6 +164,7 @@ pipeline {
           }
         }
       }
+      /*
       post {
         always {
           sh """
@@ -181,6 +182,7 @@ pipeline {
           """
         }
       }
+      */
     }
 
     stage('Deploy Docker image to EC2') {

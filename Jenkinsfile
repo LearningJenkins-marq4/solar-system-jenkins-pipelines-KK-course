@@ -194,7 +194,7 @@ pipeline {
           sshagent(['ubuntu-ssh-key-pair-ec2']) {
             sh """
               ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-246-244-210.us-west-2.compute.amazonaws.com "
-                if [[ $(sudo docker ps -a | grep -q 'solar-system') ]]
+                if sudo docker ps -a | grep -q 'solar-system'
                 then
                   echo 'Container found. Stopping and removing it...'
                   sudo docker stop 'solar-system' && sudo docker rm 'solar-system'

@@ -176,7 +176,6 @@ pipeline {
             reportTitles: '', useWrapperFileDirectly: true])
         }
       }
-      */
     }
 
     /*
